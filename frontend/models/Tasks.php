@@ -42,7 +42,7 @@ class Tasks extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
-            'id_project' => 'Id Project',
+            'id_project' => 'Project name',
         ];
     }
 

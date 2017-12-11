@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\Pagination;
+
 /**
  * ProjectsController implements the CRUD actions for Projects model.
  */
@@ -36,11 +37,10 @@ class ProjectsController extends Controller
     public function actionIndex()
     {
         if ( Yii::$app->user->isGuest )
-            return  $this->render('index');//->where(['id_user' => 2])
+            return  $this->goHome();
 
         $searchModel = new ProjectsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        //$dataProvider->query->andFilterWhere()
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -54,25 +54,6 @@ class ProjectsController extends Controller
      */
     public function actionView($id)
     {
- /*       $query = Projects::find();
-        $pagination = new Pagination(array(
-            'defaultPageSize' => 3,
-            'totalCount' => $query->count(),
-        ));
-
-        $model = $query->orderBy('name')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
-        return $this->render('view', [
-            'model' => $model,
-            'pagination' => $pagination,
-        ]);
-
-*/
-
-
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -86,7 +67,7 @@ class ProjectsController extends Controller
     public function actionCreate()
     {
         $model = new Projects();
-
+        $model->id_user = Yii::$app->getUser()->getId();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

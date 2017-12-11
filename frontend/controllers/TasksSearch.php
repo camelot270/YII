@@ -49,7 +49,16 @@ class TasksSearch extends Tasks
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'name' => [
+                    'asc' => ['name' => SORT_ASC, 'name' => SORT_ASC],
+                    'desc' => ['name' => SORT_DESC, 'name' => SORT_DESC],
+                    'default' => SORT_ASC
+                ],
+            ]
+        ]);
         $this->load($params->queryParams, 'id');
 
         if (!$this->validate()) {

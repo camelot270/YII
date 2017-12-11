@@ -35,13 +35,19 @@ class TasksController extends Controller
      */
     public function actionIndex()
     {
+        if ( Yii::$app->user->isGuest )
+            return  $this->goHome();
+
+        $id_project = Yii::$app->request->get('id');
+
         $searchModel = new TasksSearch();
-        $request = Yii::$app->request->get('id');
+        $requestId = Yii::$app->request->get('id');
         $dataProvider = $searchModel->search(Yii::$app->request);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'id_project' => $id_project,
         ]);
     }
 
@@ -64,8 +70,11 @@ class TasksController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Tasks();
+        if ( Yii::$app->user->isGuest )
+            return  $this->goHome();
 
+        $model = new Tasks();
+        $model->id_project =Yii::$app->request->get('id_project');
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
